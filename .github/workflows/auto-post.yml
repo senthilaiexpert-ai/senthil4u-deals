@@ -1,0 +1,29 @@
+name: Autopilot Blog Generator & Publisher
+
+on:
+  schedule:
+    - cron: '0 8 * * 1,4' # Automatically runs every Monday & Thursday at 8:00 AM UTC
+  workflow_dispatch: # Allows manual trigger anytime from GitHub
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Run AI & SEO Generation Engine
+        run: python generate_post.py
+
+      - name: Commit and Push Updated Site
+        run: |
+          git config --global user.name 'Automated Blog Agent'
+          git config --global user.email 'agent@senthil4u-deals.local'
+          git add .
+          git commit -m "Auto-published new article [Agent 2 & 5]" || exit 0
+          git push
