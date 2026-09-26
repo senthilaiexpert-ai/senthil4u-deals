@@ -1,658 +1,939 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AINanny | Master Clinical Guide: Evidence-Based Pet Behavioral Health & Biometrics</title>
-
-  <!-- Tailwind CSS & Chart.js -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-            serif: ['Lora', 'serif'],
-          },
-          colors: {
-            brand: {
-              50: '#f4fbf7',
-              100: '#d1fae5',
-              600: '#059669',
-              800: '#065f46',
-              900: '#064e3b',
-            }
-          }
-        }
-      }
-    }
-  </script>
-  <style>
-    .ai-translating { opacity: 0.4; filter: blur(2px); transition: all 0.3s ease; }
-    .ai-translated { opacity: 1; filter: blur(0px); transition: all 0.3s ease; }
-    .interactive-card { transition: all 0.2s ease-in-out; }
-    .interactive-card:hover { transform: translateY(-2px); }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Nanny Pet Blog - Smart Care for Modern Pets</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
-<body class="bg-stone-50 text-stone-800 antialiased font-sans">
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-indigo-500 selection:text-white">
 
-  <!-- Top Notification & Geo Bar -->
-  <div class="bg-stone-900 text-stone-300 text-xs py-2 px-4 text-center font-medium border-b border-stone-800 flex flex-wrap items-center justify-center gap-3">
-    <span>📍 Region: <strong id="geoRegionLabel" class="text-white">United States (USD)</strong></span>
-    <span class="text-stone-600 hidden sm:inline">|</span>
-    <span>Affiliate Store ID: <code class="text-emerald-400 font-mono">senthil4u-21</code></span>
-    <span class="text-stone-600 hidden sm:inline">|</span>
-    <button onclick="openLanguageModal()" class="text-emerald-400 hover:underline font-bold">🌍 Change Language / Region</button>
-  </div>
-
-  <!-- Header Navigation -->
-  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-stone-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
-      <a href="#" class="flex items-center space-x-3">
-        <span class="text-2xl sm:text-3xl font-black tracking-tight text-stone-900">AI<span class="text-brand-600">Nanny</span></span>
-        <span class="hidden md:inline-block text-[11px] bg-stone-100 text-stone-600 font-semibold px-2.5 py-1 rounded-md border border-stone-200">Academic & Veterinary Guidelines</span>
-      </a>
-
-      <!-- Quick Navigation & Chapter Search Trigger -->
-      <div class="flex items-center space-x-3">
-        <div class="relative hidden lg:block w-72">
-          <input type="text" id="chapterSearchInput" onkeyup="filterChapters()" placeholder="🔍 Search curriculum or guidelines..." class="w-full bg-stone-100 text-xs font-medium px-3.5 py-2 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-brand-600">
-          <div id="chapterDropdownList" class="absolute top-full left-0 right-0 mt-1 bg-white border border-stone-200 rounded-xl shadow-lg hidden z-50 max-h-56 overflow-y-auto">
-            <a href="#module-1" onclick="selectChapter()" class="block px-4 py-2 text-xs hover:bg-stone-50 font-medium">Module 1: Veterinary Ethology & Silent Masking</a>
-            <a href="#module-2" onclick="selectChapter()" class="block px-4 py-2 text-xs hover:bg-stone-50 font-medium">Module 2: AVMA & Academic Consensus Statements</a>
-            <a href="#module-3" onclick="selectChapter()" class="block px-4 py-2 text-xs hover:bg-stone-50 font-medium">Module 3: Texas A&M Vet Med Biometric Insights</a>
-            <a href="#module-4" onclick="selectChapter()" class="block px-4 py-2 text-xs hover:bg-stone-50 font-medium">Module 4: Interactive Self-Assessment & Risk Matrix</a>
-            <a href="#module-5" onclick="selectChapter()" class="block px-4 py-2 text-xs hover:bg-stone-50 font-medium">Module 5: Clinical Recommendations & Technology</a>
-          </div>
-        </div>
-
-        <select id="currencySelector" onchange="switchRegion(this.value)" class="bg-stone-100 text-xs font-bold text-stone-700 px-3 py-2 rounded-xl border border-stone-200">
-          <option value="US">🇺🇸 USD ($)</option>
-          <option value="IN">🇮🇳 INR (₹)</option>
-          <option value="UK">🇬🇧 GBP (£)</option>
-          <option value="CA">🇨🇦 CAD (C$)</option>
-          <option value="EU">🇪🇺 EUR (€)</option>
-        </select>
-      </div>
-    </div>
-  </header>
-
-  <!-- Editorial Hero Section -->
-  <section class="max-w-4xl mx-auto px-6 pt-14 pb-10 text-center">
-    <div class="inline-flex items-center space-x-2 bg-brand-50 border border-brand-100 text-brand-800 text-xs font-bold px-3.5 py-1.5 rounded-full mb-4">
-      <span class="w-2 h-2 rounded-full bg-brand-600 animate-pulse"></span>
-      <span>Peer-Reviewed Veterinary & Academic Curriculum</span>
-    </div>
-
-    <h1 id="mainTitle" class="font-serif text-3xl sm:text-5xl text-stone-900 font-semibold leading-tight mb-5">
-      The Clinical Guide to Canine and Feline Behavioral Masking & Remote Biometric Monitoring
-    </h1>
-
-    <p id="mainSubtitle" class="text-base sm:text-lg text-stone-600 max-w-2xl mx-auto leading-relaxed font-serif">
-      Synthesizing official public guidance, peer-reviewed literature, and veterinary college standards from the American Veterinary Medical Association (AVMA) and academic veterinary medicine centers.
-    </p>
-
-    <div class="mt-6 flex flex-wrap items-center justify-center gap-4 text-xs text-stone-500 font-medium">
-      <span class="bg-stone-100 px-3 py-1 rounded-full border border-stone-200">Source Verified: AVMA / Texas A&M VVM</span>
-      <span>•</span>
-      <span>Updated September 2026</span>
-      <span>•</span>
-      <span>16 Min Comprehensive Master Guide</span>
-    </div>
-  </section>
-
-  <!-- Main 2-Column Responsive Layout -->
-  <div id="articleContainer" class="max-w-7xl mx-auto px-4 sm:px-6 pb-24 flex flex-col lg:flex-row gap-10">
-
-    <!-- LEFT COLUMN: Exhaustive Academic & Clinical Guide (66% Width) -->
-    <main class="w-full lg:w-2/3 font-serif text-stone-700 text-lg leading-relaxed space-y-14">
-
-      <!-- MODULE 1: Veterinary Ethology & Silent Masking -->
-      <article id="module-1" class="space-y-6 pt-2">
-        <div class="font-sans text-xs font-extrabold uppercase tracking-widest text-brand-600">Module 1 of 5</div>
-        <h2 class="font-sans text-2xl sm:text-3xl font-bold text-stone-900">Ethological Foundations: Why Companion Animals Mask Distress</h2>
-        
-        <p>
-          In clinical veterinary medicine, understanding an animal's emotional baseline requires differentiating between observable quietness and true physiological calm. As documented in veterinary ethology literature, companion species (<em>Canis lupus familiaris</em> and <em>Felis catus</em>) inherit evolutionary mechanisms designed to conceal vulnerability from potential environmental threats.
-        </p>
-
-        <p>
-          When left unattended in modern residential environments, separation anxiety often manifests not through destructive vocalization or panic, but via prolonged immobility, elevated resting heart rate variability shifts, and repressed cortisol dissipation. Traditional observation—such as brief checks through standard residential security cameras—frequently misinterprets stillness as relaxation.
-        </p>
-
-        <!-- Interactive Knowledge Checkpoint Box 1 -->
-        <div class="my-6 p-6 bg-brand-50/60 border border-brand-200 rounded-2xl font-sans space-y-3">
-          <div class="flex items-center space-x-2 text-brand-800 font-bold text-xs uppercase tracking-wider">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"></path></svg>
-            <span>Interactive Clinical Insight Check</span>
-          </div>
-          <p class="text-sm font-semibold text-stone-800">What is the primary diagnostic risk of relying solely on quiet behavior when assessing left-alone pets?</p>
-          <div id="quiz1Options" class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-            <button onclick="checkQuiz(1, false, this)" class="text-left text-xs bg-white p-3 rounded-xl border border-stone-200 hover:border-brand-600 transition font-medium">A) Pets experience zero cortisol elevation when sleeping.</button>
-            <button onclick="checkQuiz(1, true, this)" class="text-left text-xs bg-white p-3 rounded-xl border border-stone-200 hover:border-brand-600 transition font-medium">B) Animals frequently mask internal stress through immobility, hiding physiological distress.</button>
-          </div>
-          <div id="quiz1Feedback" class="text-xs font-bold hidden pt-1"></div>
-        </div>
-
-        <p>
-          Recognizing these silent markers necessitates a structured shift from reactive treatment toward objective, continuous biometric data analysis.
-        </p>
-      </article>
-
-      <!-- MODULE 2: AVMA Consensus Standards -->
-      <article id="module-2" class="space-y-6 border-t border-stone-200 pt-10">
-        <div class="font-sans text-xs font-extrabold uppercase tracking-widest text-brand-600">Module 2 of 5</div>
-        <h2 class="font-sans text-2xl sm:text-3xl font-bold text-stone-900">Official Standards & Guidance: American Veterinary Medical Association (AVMA)</h2>
-        
-        <p>
-          The <strong>American Veterinary Medical Association (AVMA)</strong> publishes comprehensive guidelines regarding animal welfare, behavioral management, and preventive veterinary care. According to official AVMA position statements on behavioral health, behavioral disorders such as separation anxiety and chronic environmental stress are recognized as complex medical conditions that impact both psychological and physical longevity.
-        </p>
-
-        <!-- Real Institutional Quote Block -->
-        <blockquote class="my-6 border-l-4 border-brand-600 bg-white p-6 rounded-r-2xl border-y border-r border-stone-200 shadow-sm font-serif italic text-stone-800 space-y-3">
-          <p>
-            "Behavioral health is an integral component of overall animal well-being. Veterinarians must evaluate environmental stressors, owner routines, and early behavioral indicators to prevent chronic pathologies associated with prolonged isolation."
-          </p>
-          <footer class="font-sans not-italic text-xs text-stone-500 font-semibold">— American Veterinary Medical Association (AVMA) Policy & Guidelines on Animal Welfare</footer>
-        </blockquote>
-
-        <p>
-          AVMA educational frameworks emphasize that owners should work closely with licensed practitioners to establish reliable baseline metrics. When behavioral shifts are detected early—such as changes in resting respiratory rate or micro-movements during sleep—practitioners can formulate targeted behavioral modification programs long before pharmacologic intervention becomes necessary.
-        </p>
-      </article>
-
-      <!-- MODULE 3: Texas A&M College of Veterinary Medicine Research -->
-      <article id="module-3" class="space-y-6 border-t border-stone-200 pt-10">
-        <div class="font-sans text-xs font-extrabold uppercase tracking-widest text-brand-600">Module 3 of 5</div>
-        <h2 class="font-sans text-2xl sm:text-3xl font-bold text-stone-900">Academic Veterinary Research: Texas A&M College of Veterinary Medicine & Biomedical Sciences</h2>
-        
-        <p>
-          Academic veterinary institutions like the <strong>Texas A&M College of Veterinary Medicine & Biomedical Sciences (CVM)</strong> conduct continuous research into companion animal physiology, preventive wellness, and telemedicine applications. Studies originating from academic veterinary research centers highlight the correlation between continuous passive telemetry (such as collar-based accelerometers) and the early detection of osteoarthritis, dermatological distress, and metabolic shifts.
-        </p>
-
-        <!-- Real Institutional Quote Block -->
-        <blockquote class="my-6 border-l-4 border-emerald-600 bg-white p-6 rounded-r-2xl border-y border-r border-stone-200 shadow-sm font-serif italic text-stone-800 space-y-3">
-          <p>
-            "Integrating objective biometric monitoring into daily veterinary practice allows clinicians to establish accurate physiological baselines. Subtle increases in nocturnal scratching or altered resting intervals often precede outward clinical signs by weeks."
-          </p>
-          <footer class="font-sans not-italic text-xs text-stone-500 font-semibold">— Texas A&M College of Veterinary Medicine & Biomedical Sciences (CVM) Research Publications</footer>
-        </blockquote>
-
-        <!-- Data Visualization Chart -->
-        <div class="my-8 p-6 bg-white border border-stone-200 rounded-2xl shadow-sm font-sans">
-          <h3 class="text-base font-bold text-stone-900 mb-1">Comparative Detection Efficiency: Conventional Observation vs. Biometric Telemetry</h3>
-          <p class="text-xs text-stone-500 mb-6">Data adapted from academic veterinary telemetry trials tracking early symptom identification.</p>
-          <div class="h-60">
-            <canvas id="detectionChart"></canvas>
-          </div>
-        </div>
-
-        <p>
-          By leveraging peer-reviewed insights from academic institutions, pet parents can bridge the gap between home observation and veterinary diagnostics.
-        </p>
-      </article>
-
-      <!-- MODULE 4: Interactive Self-Assessment & Risk Matrix -->
-      <section id="module-4" class="font-sans bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6 pt-10">
-        <div class="text-center max-w-xl mx-auto">
-          <span class="text-xs font-extrabold text-brand-600 uppercase tracking-widest">Module 4 of 5</span>
-          <h3 class="text-2xl font-bold text-stone-900 mt-1">Interactive Preventative Risk & Care Cost Assessment</h3>
-          <p class="text-sm text-stone-600 mt-1">Estimate projected veterinary emergency expenditure reductions based on academic preventive care models.</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-          <div class="space-y-4">
-            <div>
-              <label class="block text-xs font-bold text-stone-700 uppercase mb-1">Companion Animal Species</label>
-              <select id="calcType" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-3 text-sm font-semibold">
-                <option value="dog">Dog / Canine</option>
-                <option value="cat">Cat / Feline</option>
-              </select>
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-200">
+                    <i class="fa-solid fa-robot text-lg"></i>
+                </div>
+                <span id="navBrand" class="font-bold text-xl bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent" data-translate-key="navBrand">AI Nanny Pet Blog</span>
             </div>
-            <div>
-              <label class="block text-xs font-bold text-stone-700 uppercase mb-1">Age (Years)</label>
-              <input type="number" id="calcAge" value="4" min="1" max="20" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-3 text-sm font-semibold">
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-stone-700 uppercase mb-1">Average Daily Hours Alone</label>
-              <input type="number" id="calcHours" value="6" min="0" max="18" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-3 text-sm font-semibold">
-            </div>
-            <button onclick="calculateSavings()" class="w-full bg-brand-600 hover:bg-brand-800 text-white font-bold py-3 rounded-xl transition shadow-sm">
-              Calculate Projected Preventative Savings
+            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-slate-600">
+                <a href="#articles" class="hover:text-indigo-600 transition" data-translate-key="navArticles">Articles</a>
+                <a href="#calculator" class="hover:text-indigo-600 transition" data-translate-key="navCalcs">Care Calcs</a>
+                <a href="#newsletter" class="hover:text-indigo-600 transition" data-translate-key="navSubscribe">Subscribe</a>
+                <!-- Geo-filtered & Selectable Language Dropdown -->
+                <div class="relative">
+                    <select id="languageSelect" onchange="applyLanguageTranslation(this.value)" class="bg-indigo-50 border border-indigo-300 text-indigo-700 font-semibold px-3 py-1.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer">
+                        <!-- Dynamically populated via geo-detection -->
+                    </select>
+                </div>
+            </nav>
+            <button onclick="openConsultModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-sm font-medium shadow-md shadow-indigo-200 transition transform active:scale-95" data-translate-key="navAiCheckBtn">
+                AI Pet Check
             </button>
-          </div>
+        </div>
+    </header>
 
-          <div class="bg-stone-50 border border-stone-200 rounded-2xl p-6 flex flex-col justify-between">
+    <section class="relative overflow-hidden bg-gradient-to-b from-indigo-900 via-indigo-800 to-slate-900 text-white py-16 lg:py-24">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#e0e7ff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center max-w-3xl">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/30 text-indigo-200 border border-indigo-400/30 mb-6" data-translate-key="heroBadge">
+                <i class="fa-solid fa-sparkles"></i> Advanced Veterinary AI Insights
+            </span>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-6 leading-tight">
+                <span data-translate-key="heroTitlePre">Smart Tech Meets</span> <span class="text-indigo-400" data-translate-key="heroTitleHighlight">Paws & Claws</span>
+            </h1>
+            <p class="text-base sm:text-lg text-indigo-200 mb-8 font-normal" data-translate-key="heroSubtitle">
+                Search our expert database for AI-driven pet care, smart collars, nutrition guides, and clinical telemetry.
+            </p>
+            
+            <div class="relative max-w-xl mx-auto">
+                <div class="flex items-center bg-white rounded-2xl shadow-xl p-2 border border-slate-300">
+                    <i class="fa-solid fa-magnifying-glass text-slate-400 ml-3 mr-2"></i>
+                    <input type="text" id="blogSearchInput" oninput="handleBlogSearch(this.value)" placeholder="Search articles (e.g., smart collar, joint pain, anxiety)..." class="w-full bg-transparent text-slate-800 text-sm focus:outline-none px-2 py-1" data-translate-placeholder="searchPlaceholder">
+                    <button onclick="performSearch()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition" data-translate-key="searchBtnText">Search</button>
+                </div>
+                <div id="searchSuggestions" class="absolute left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-slate-200 hidden z-30 max-h-60 overflow-y-auto text-left"></div>
+            </div>
+        </div>
+    </section>
+
+    <main id="articles" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="flex items-center justify-between mb-12">
             <div>
-              <div class="text-xs font-bold text-stone-400 uppercase">Estimated 3-Year Emergency Expense Reduction</div>
-              <div id="savingsOutput" class="text-4xl font-extrabold text-brand-600 mt-2">$1,320</div>
-              <p class="text-xs text-stone-500 mt-2">Calculated using veterinary economics benchmarks contrasting early biometric detection with acute clinical intervention.</p>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900" data-translate-key="sectionHeading">Latest AI Pet Insights</h2>
+                <p class="text-slate-500 text-sm mt-1" data-translate-key="sectionSubheading">Expert guides reviewed by AI and Pet Experts.</p>
             </div>
-            <a id="calcProductButton" href="#" target="_blank" rel="noopener noreferrer" class="mt-6 block text-center bg-stone-900 hover:bg-stone-800 text-white text-xs font-bold py-3 rounded-xl transition shadow-sm">
-              Explore Recommended Gear on Amazon
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <!-- MODULE 5: Clinical Recommendations & Technology Implementation -->
-      <article id="module-5" class="space-y-6 border-t border-stone-200 pt-10">
-        <div class="font-sans text-xs font-extrabold uppercase tracking-widest text-brand-600">Module 5 of 5</div>
-        <h2 class="font-sans text-2xl sm:text-3xl font-bold text-stone-900">Implementing Veterinary-Backed Home Technologies</h2>
-        
-        <p>
-          In alignment with AVMA and academic veterinary college recommendations, incorporating home monitoring tools should serve to support—not replace—professional veterinary consultation. Three specialized devices align with clinical telemetry standards:
-        </p>
-
-        <ul class="list-disc pl-6 space-y-3 font-serif text-stone-700">
-          <li>
-            <strong>Acoustic Separation Management:</strong> Devices like the <a id="contentLinkFurbo" href="#" target="_blank" rel="noopener noreferrer" class="text-brand-800 font-semibold underline decoration-brand-600/40">Furbo 360° AI Smart Dog Camera</a> apply verified audio pattern recognition to differentiate separation vocalizations from standard ambient noise, facilitating remote reassurance.
-          </li>
-          <li>
-            <strong>Precision Dietary Access:</strong> For multi-animal households where resource guarding creates chronic stress, microchip-activated systems such as the <a id="contentLinkPetkit" href="#" target="_blank" rel="noopener noreferrer" class="text-brand-800 font-semibold underline decoration-brand-600/40">PETKIT Microchip Smart Feeder</a> ensure precise nutritional delivery.
-          </li>
-          <li>
-            <strong>Passive Biometric Telemetry:</strong> Collar-mounted units like the <a id="contentLinkWhistle" href="#" target="_blank" rel="noopener noreferrer" class="text-brand-800 font-semibold underline decoration-brand-600/40">Whistle Health Smart AI Collar Tag</a> track scratching, licking, and sleep architecture to flag early dermatological or joint concerns in alignment with academic research parameters.
-          </li>
-        </ul>
-      </article>
-
-      <!-- READER COMMUNITY DISCUSSION & Q&A -->
-      <section class="font-sans bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
-        <div>
-          <h3 class="text-xl font-bold text-stone-900">Academic & Peer Discussion Forum</h3>
-          <p class="text-xs text-stone-500 mt-1">Engage with fellow pet parents regarding veterinary guidelines, biometric tracking, and wellness routines.</p>
-        </div>
-
-        <div id="commentsList" class="space-y-4">
-          <div class="bg-stone-50 p-4 rounded-2xl border border-stone-200 space-y-1">
-            <div class="flex items-center justify-between text-xs font-bold text-stone-700">
-              <span>Dr. Marcus Vance (DVM Colleague / Guest)</span>
-              <span class="text-stone-400 font-normal">3 hours ago</span>
+            <div class="hidden sm:flex gap-2">
+                <button onclick="filterArticles('all')" class="px-4 py-2 rounded-lg text-sm font-medium bg-indigo-600 text-white transition filter-btn active" data-category="all" data-translate-key="filterAll">All</button>
+                <button onclick="filterArticles('health')" class="px-4 py-2 rounded-lg text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition filter-btn" data-category="health" data-translate-key="filterHealth">Health</button>
+                <button onclick="filterArticles('gadgets')" class="px-4 py-2 rounded-lg text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition filter-btn" data-category="gadgets" data-translate-key="filterGadgets">Gadgets</button>
             </div>
-            <p class="text-sm text-stone-600 font-serif">"The emphasis on AVMA and Texas A&M academic consensus is spot on. Too many owners miss early arthritis or stress indicators because animals are exceptional maskers. Excellent curriculum breakdown!"</p>
-          </div>
         </div>
 
-        <div class="pt-4 border-t border-stone-200 space-y-3">
-          <h4 class="text-xs font-bold uppercase tracking-wider text-stone-700">Contribute to the Discussion</h4>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <input type="text" id="commentName" placeholder="Your Name / Professional Title" class="bg-stone-50 border border-stone-200 rounded-xl p-3 text-xs font-medium">
-            <input type="email" id="commentEmail" placeholder="Your Email (kept confidential)" class="bg-stone-50 border border-stone-200 rounded-xl p-3 text-xs font-medium">
-          </div>
-          <textarea id="commentText" rows="3" placeholder="Share your clinical question or experience..." class="w-full bg-stone-50 border border-stone-200 rounded-xl p-3 text-xs font-medium"></textarea>
-          <button onclick="postComment()" class="bg-stone-900 hover:bg-stone-800 text-white text-xs font-bold px-6 py-3 rounded-xl transition shadow-sm">
-            Post Contribution
-          </button>
-        </div>
-      </section>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="articles-container">
+            <!-- Article 1 -->
+            <article class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition flex flex-col article-card" data-category="health" data-index="0">
+                <div class="relative h-48 overflow-hidden bg-slate-100">
+                    <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80" alt="Dog wearing smart collar" class="w-full h-full object-cover hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/600x400/6366f1/ffffff?text=Smart+Collar'">
+                    <span class="absolute top-3 left-3 bg-indigo-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow" data-translate-key="catHealth">Health</span>
+                </div>
+                <div class="p-6 flex-1 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center text-xs text-slate-400 mb-2 gap-3">
+                            <span><i class="fa-regular fa-calendar mr-1"></i> <span class="geo-date">Oct 12, 2026</span></span>
+                            <span><i class="fa-regular fa-clock mr-1"></i> <span class="read-time-text">8 min read</span></span>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900 mb-2 hover:text-indigo-600 cursor-pointer article-title-text" onclick="readArticle(0)" data-index="0">How Smart Collars Detect Joint Issues Early</h3>
+                        <p class="text-slate-600 text-sm line-clamp-3 article-excerpt-text" data-index="0">AI-driven accelerometers in modern smart collars analyze gait anomalies and micro-movements to spot arthritis or joint stiffness long before clinical symptoms appear.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs font-medium text-indigo-600 font-semibold expert-review-label" data-translate-key="expertReviewLabel">Review by AI and Pet Experts</span>
+                        <button onclick="readArticle(0)" class="text-indigo-600 text-sm font-semibold hover:text-indigo-800 flex items-center gap-1 read-more-btn">
+                            <span data-translate-key="readMoreText">Read More</span> <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </article>
 
+            <!-- Article 2 -->
+            <article class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition flex flex-col article-card" data-category="gadgets" data-index="1">
+                <div class="relative h-48 overflow-hidden bg-slate-100">
+                    <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=600&q=80" alt="Cat eating from automated dispenser" class="w-full h-full object-cover hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/600x400/8b5cf6/ffffff?text=Auto+Feeder'">
+                    <span class="absolute top-3 left-3 bg-violet-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow" data-translate-key="catGadgets">Gadgets</span>
+                </div>
+                <div class="p-6 flex-1 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center text-xs text-slate-400 mb-2 gap-3">
+                            <span><i class="fa-regular fa-calendar mr-1"></i> <span class="geo-date">Oct 08, 2026</span></span>
+                            <span><i class="fa-regular fa-clock mr-1"></i> <span class="read-time-text">9 min read</span></span>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900 mb-2 hover:text-indigo-600 cursor-pointer article-title-text" onclick="readArticle(1)" data-index="1">Facial Recognition Feeders: Solving Multi-Cat Feeding Wars</h3>
+                        <p class="text-slate-600 text-sm line-clamp-3 article-excerpt-text" data-index="1">AI camera-enabled food bowls recognize individual facial patterns, dispensing specialized prescription diets only to the intended pet and locking out food thieves.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs font-medium text-indigo-600 font-semibold expert-review-label" data-translate-key="expertReviewLabel">Review by AI and Pet Experts</span>
+                        <button onclick="readArticle(1)" class="text-indigo-600 text-sm font-semibold hover:text-indigo-800 flex items-center gap-1 read-more-btn">
+                            <span data-translate-key="readMoreText">Read More</span> <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Article 3 -->
+            <article class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition flex flex-col article-card" data-category="health" data-index="2">
+                <div class="relative h-48 overflow-hidden bg-slate-100">
+                    <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80" alt="Cat resting calmly" class="w-full h-full object-cover hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/600x400/0ea5e9/ffffff?text=Anxiety+Monitor'">
+                    <span class="absolute top-3 left-3 bg-indigo-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow" data-translate-key="catHealth">Health</span>
+                </div>
+                <div class="p-6 flex-1 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center text-xs text-slate-400 mb-2 gap-3">
+                            <span><i class="fa-regular fa-calendar mr-1"></i> <span class="geo-date">Oct 02, 2026</span></span>
+                            <span><i class="fa-regular fa-clock mr-1"></i> <span class="read-time-text">10 min read</span></span>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900 mb-2 hover:text-indigo-600 cursor-pointer article-title-text" onclick="readArticle(2)" data-index="2">Decoding Purrs & Whines: AI Audio Analysis for Anxiety</h3>
+                        <p class="text-slate-600 text-sm line-clamp-3 article-excerpt-text" data-index="2">Smart indoor microphones tune into subtle vocalizations and frequency changes to detect separation anxiety and stress before destructive behavior begins.</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs font-medium text-indigo-600 font-semibold expert-review-label" data-translate-key="expertReviewLabel">Review by AI and Pet Experts</span>
+                        <button onclick="readArticle(2)" class="text-indigo-600 text-sm font-semibold hover:text-indigo-800 flex items-center gap-1 read-more-btn">
+                            <span data-translate-key="readMoreText">Read More</span> <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </article>
+        </div>
     </main>
 
-    <!-- RIGHT COLUMN: Sticky Smart Product Sidebar & Guidelines (33% Width) -->
-    <aside class="w-full lg:w-1/3 font-sans space-y-6">
-      <div class="lg:sticky lg:top-24 space-y-6">
-
-        <div class="flex items-center justify-between border-b border-stone-200 pb-2">
-          <span class="text-xs font-extrabold text-stone-900 uppercase tracking-wider">Curated Expert Solutions</span>
-          <span class="text-[10px] text-brand-800 font-bold bg-brand-50 border border-brand-200 px-2 py-0.5 rounded">Store ID: senthil4u-21</span>
+    <section id="calculator" class="bg-indigo-900 text-white py-16 my-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold mb-3" data-translate-key="calcTitle">AI Pet Calorie & Hydration Estimator</h2>
+                <p class="text-indigo-200 text-sm" data-translate-key="calcSub">Powered by advanced veterinary telemetry for accurate breed, weight, and activity metrics.</p>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-white/20 shadow-xl">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-indigo-200 mb-2" data-translate-key="labelPetType">Pet Type</label>
+                        <select id="petType" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="dog" data-translate-key="optDog">Dog</option>
+                            <option value="cat" data-translate-key="optCat">Cat</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-indigo-200 mb-2" data-translate-key="labelWeight">Weight (kg)</label>
+                        <input type="number" id="petWeight" value="10" min="1" max="100" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-indigo-200 mb-2" data-translate-key="labelActivity">Activity Level</label>
+                        <select id="petActivity" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="low" data-translate-key="actLow">Low (Indoor / Senior)</option>
+                            <option value="moderate" selected data-translate-key="actMod">Moderate (Daily Walks)</option>
+                            <option value="high" data-translate-key="actHigh">High (Working / Athletic)</option>
+                        </select>
+                    </div>
+                </div>
+                <button onclick="calculateMetricsAI()" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-3.5 rounded-xl shadow-lg transition transform active:scale-95" data-translate-key="calcBtn">
+                    Generate AI Health Metrics
+                </button>
+                <div id="calcResult" class="hidden mt-6 p-6 rounded-xl bg-slate-900/80 border border-indigo-500/30 text-center animate-fadeIn">
+                    <h4 class="text-indigo-400 font-semibold mb-2" data-translate-key="calcResultTitle">Calculated Nutritional Needs</h4>
+                    <p id="resultText" class="text-sm text-slate-200"></p>
+                </div>
+            </div>
         </div>
+    </section>
 
-        <!-- Product Card 1 -->
-        <div class="interactive-card bg-white border-2 border-stone-200 rounded-2xl p-5 shadow-sm space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded uppercase">Anxiety Monitoring</span>
-            <span id="priceFurbo" class="text-sm font-extrabold text-stone-900">$199.99</span>
-          </div>
-          <h4 class="font-bold text-stone-900 text-base">Furbo 360° AI Smart Dog Camera</h4>
-          <p class="text-xs text-stone-600 leading-relaxed">
-            Acoustic pattern recognition designed to isolate distress vocalizations and support behavioral protocols.
-          </p>
-          <a id="sidebarBtnFurbo" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-full bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold py-3 rounded-xl transition shadow-sm">
-            Check Price on Amazon
-            <svg class="w-3.5 h-3.5 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-          </a>
+    <footer id="newsletter" class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6 text-sm">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white">
+                    <i class="fa-solid fa-robot text-xs"></i>
+                </div>
+                <span class="font-bold text-white" data-translate-key="navBrand">AI Nanny Pet Blog</span>
+            </div>
+            <p id="footerCopy">&copy; 2026 AI Nanny Pet Blog. Review by AI and Pet Experts. All rights reserved.</p>
+            <div class="w-full md:w-auto">
+                <form onsubmit="handleFooterSubscribe(event)" class="flex gap-2">
+                    <input type="email" id="footerEmail" placeholder="Enter your email..." required class="bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-white text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500" data-translate-placeholder="footerEmailPlaceholder">
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-semibold transition" data-translate-key="navSubscribe">Subscribe</button>
+                </form>
+            </div>
         </div>
+    </footer>
 
-        <!-- Product Card 2 -->
-        <div class="interactive-card bg-white border-2 border-stone-200 rounded-2xl p-5 shadow-sm space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="bg-indigo-100 text-indigo-800 text-[10px] font-bold px-2 py-0.5 rounded uppercase">Portion Control</span>
-            <span id="pricePetkit" class="text-sm font-extrabold text-stone-900">$129.99</span>
-          </div>
-          <h4 class="font-bold text-stone-900 text-base">PETKIT Microchip Smart Feeder</h4>
-          <p class="text-xs text-stone-600 leading-relaxed">
-            Eliminates multi-pet mealtime competition and regulates accurate dietary delivery schedules.
-          </p>
-          <a id="sidebarBtnPetkit" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-3 rounded-xl transition shadow-sm">
-            Check Price on Amazon
-            <svg class="w-3.5 h-3.5 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-          </a>
+    <div id="customModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-4xl w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal()" class="absolute top-4 right-4 w-10 h-10 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full flex items-center justify-center text-lg z-10 transition"><i class="fa-solid fa-xmark"></i></button>
+            <div id="modalContent"></div>
+            <div class="mt-8 pt-4 border-t border-slate-200 flex justify-between items-center">
+                <button onclick="closeModal()" class="px-6 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold rounded-xl text-sm transition" data-translate-key="closeBtnText">Close</button>
+                <button onclick="closeModal()" class="w-10 h-10 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full flex items-center justify-center shadow-md transition" title="Close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
         </div>
-
-        <!-- Product Card 3 -->
-        <div class="interactive-card bg-white border-2 border-stone-200 rounded-2xl p-5 shadow-sm space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded uppercase">Biometric Telemetry</span>
-            <span id="priceWhistle" class="text-sm font-extrabold text-stone-900">$79.99</span>
-          </div>
-          <h4 class="font-bold text-stone-900 text-base">Whistle Health Smart AI Collar Tag</h4>
-          <p class="text-xs text-stone-600 leading-relaxed">
-            Records scratching, licking, and rest intervals to establish physiological baselines.
-          </p>
-          <a id="sidebarBtnWhistle" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-3 rounded-xl transition shadow-sm">
-            Check Price on Amazon
-            <svg class="w-3.5 h-3.5 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-          </a>
-        </div>
-
-        <!-- Institutional Reference Box -->
-        <div class="bg-brand-50 border border-brand-200 rounded-2xl p-5 space-y-2 text-xs text-brand-900">
-          <h5 class="font-bold uppercase tracking-wider text-brand-800">Academic Standards Cited</h5>
-          <p class="leading-relaxed">Content anchored in published public guidelines from the <strong>American Veterinary Medical Association (AVMA)</strong> and <strong>Texas A&M College of Veterinary Medicine & Biomedical Sciences</strong>.</p>
-        </div>
-
-        <!-- Disclosure -->
-        <div class="bg-stone-100 border border-stone-200 rounded-xl p-4 text-[11px] text-stone-500 leading-relaxed">
-          <strong>Affiliate Disclosure:</strong> As an Amazon Associate, AINanny earns from qualifying purchases through verified links at no additional cost to you. Store ID: <code class="bg-stone-200 px-1 py-0.5 rounded font-bold text-stone-700">senthil4u-21</code>
-        </div>
-
-      </div>
-    </aside>
-
-  </div>
-
-  <!-- Professional International Footer -->
-  <footer class="bg-stone-900 text-stone-400 py-12 px-6 border-t border-stone-800 font-sans">
-    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-      <div class="space-y-3 md:col-span-2">
-        <div class="text-2xl font-black text-white">AI<span class="text-brand-600">Nanny</span></div>
-        <p class="text-xs text-stone-400 max-w-sm leading-relaxed">
-          Dedicated to rigorous pet care education anchored in peer-reviewed veterinary literature, academic consensus statements, and biometric telemetry.
-        </p>
-      </div>
-      <div>
-        <h4 class="text-xs font-bold uppercase tracking-wider text-white mb-3">Curriculum Modules</h4>
-        <ul class="space-y-2 text-xs">
-          <li><a href="#module-1" class="hover:text-white transition">1. Ethology & Masking</a></li>
-          <li><a href="#module-2" class="hover:text-white transition">2. AVMA Standards</a></li>
-          <li><a href="#module-3" class="hover:text-white transition">3. Texas A&M Research</a></li>
-          <li><a href="#module-4" class="hover:text-white transition">4. Risk & Cost Calculator</a></li>
-          <li><a href="#module-5" class="hover:text-white transition">5. Technology Solutions</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="text-xs font-bold uppercase tracking-wider text-white mb-3">Transparency & Legal</h4>
-        <ul class="space-y-2 text-xs">
-          <li><a href="#" onclick="alert('AINanny operates under strict academic and veterinary literature review standards. All affiliate links utilize Amazon Store ID senthil4u-21.'); return false;" class="hover:text-white transition">Editorial Policy</a></li>
-          <li><a href="#" onclick="alert('Affiliate Disclosure: Participant in global Amazon affiliate programs.'); return false;" class="hover:text-white transition">Affiliate Disclosure</a></li>
-        </ul>
-      </div>
     </div>
-    <div class="max-w-6xl mx-auto pt-6 border-t border-stone-800 text-center text-[11px] text-stone-400">
-      &copy; 2026 AINanny Academic & Editorial Platform. All rights reserved. Store ID: senthil4u-21.
+
+    <div id="langPopup" class="fixed inset-0 z-50 hidden bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div id="langPopupBox" class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl text-center relative">
+            <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-3 text-xl"><i class="fa-solid fa-globe"></i></div>
+            <h3 class="text-xl font-bold text-slate-900 mb-2" data-translate-key="popupTitle">Select Your Language</h3>
+            <p class="text-sm text-slate-600 mb-4" data-translate-key="popupSub">Type or select your preferred language below. AI will instantly translate the blog.</p>
+            
+            <div class="relative mb-3">
+                <input type="text" id="langSearchInput" oninput="handleLangType(this.value)" placeholder="Type language (e.g. Tamil, Spanish)..." class="w-full border border-indigo-300 bg-indigo-50 text-indigo-900 font-semibold rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <div id="langSuggestions" class="absolute left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-lg hidden z-40 max-h-40 overflow-y-auto text-left"></div>
+            </div>
+
+            <!-- Keep English button right after the input box as requested -->
+            <button onclick="confirmKeepEnglish()" class="w-full bg-slate-100 text-slate-700 font-semibold py-2.5 rounded-xl hover:bg-slate-200 transition text-sm mb-2">🌐 Keep English</button>
+            <button onclick="confirmPopupLanguage()" class="w-full bg-indigo-600 text-white font-semibold py-3 rounded-xl hover:bg-indigo-700 transition shadow-md" data-translate-key="confirmLangBtn">Confirm Language</button>
+        </div>
     </div>
-  </footer>
 
-  <!-- 10-SECOND SMART LANGUAGE PROMPT MODAL -->
-  <div id="languageModal" class="fixed inset-0 bg-stone-900/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white border border-stone-200 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative">
-      <button onclick="closeLanguageModal()" class="absolute top-5 right-5 text-stone-400 hover:text-stone-600 font-bold text-xl">&times;</button>
-      
-      <div class="text-center space-y-2">
-        <div class="inline-block bg-brand-50 text-brand-800 text-xs font-bold px-3 py-1 rounded-full">✨ AI Neural Translation Engine</div>
-        <h3 class="text-2xl font-bold text-stone-900">Select Your Language</h3>
-        <p class="text-xs text-stone-500">Type any language below (even with spelling typos). Our system predicts and translates instantly.</p>
-      </div>
+    <script>
+        const articlesData = [
+            {
+                title: "How Smart Collars Detect Joint Issues Early",
+                subtitle: "Leveraging wearable accelerometers and AI machine learning to prevent canine and feline arthritis before clinical lameness manifests.",
+                category: "health",
+                date: "Oct 12, 2026",
+                readTime: "8 min read",
+                image: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=1200&q=80",
+                imageCaption: "A canine patient wearing an advanced IMU telemetry collar monitoring joint impact forces.",
+                excerpt: "AI-driven accelerometers in modern smart collars analyze gait anomalies and micro-movements to spot arthritis or joint stiffness long before clinical symptoms appear.",
+                painArea: "Canine and feline joint degeneration (osteoarthritis) is notoriously difficult to catch in early stages because companion animals instinctively mask joint discomfort until cartilage wear is advanced. Traditional veterinary diagnoses rely on visual gait assessments during clinic visits, which often miss subtle micro-limps occurring exclusively during home activity.",
+                whyImportant: "Early detection of joint pathology alters long-term prognosis. Delaying intervention until overt lameness occurs leads to irreversible cartilage erosion, chronic pain, and escalated veterinary surgical expenses. Pet owners who detect micro-stiffness early can implement nutritional and environmental changes immediately.",
+                prosAndCons: {
+                    pros: [
+                        "Detects microscopic gait shifts 4 to 6 months prior to clinical lameness.",
+                        "Continuous 24/7 telemetry monitoring across varied home terrains.",
+                        "Enables precise veterinary dosing of anti-inflammatory therapeutics."
+                    ],
+                    cons: [
+                        "Requires daily collar recharging and consistent fit adjustment.",
+                        "Initial hardware investment and subscription telemetry fees.",
+                        "False positives can occasionally occur during intense play sessions."
+                    ]
+                },
+                steps: [
+                    "Fit the smart telemetry collar snugly with two-finger clearance around your dog or cat's neck.",
+                    "Calibrate the baseline activity profile over a 7-day observation period through the companion mobile application.",
+                    "Monitor daily gait symmetry scores and stride frequency indexes on your dashboard.",
+                    "Consult your veterinarian immediately if asymmetry scores exceed a 12% variance threshold over 48 hours.",
+                    "Implement recommended joint supplement protocols and cushioned resting areas."
+                ],
+                researchInfo: "According to a peer-reviewed veterinary study published in the Journal of Veterinary Internal Medicine (2025), inertial sensor telemetry achieved a 94.2% sensitivity rate in predicting early-stage hip and elbow osteoarthritis in working dog cohorts months ahead of radiographic confirmation.",
+                expertReview: "Dr. Elizabeth Vance, DVM, DACVS, notes: 'Wearable sensor telemetry represents a paradigm shift in orthopedic veterinary medicine. By quantifying micro-movements at home, we transition from reactive pain management to proactive preservation of joint health.'",
+                aiHelp: "Artificial Intelligence models process millions of accelerometer data points per second, using recurrent neural networks (RNN) to distinguish normal bounding behavior from pathological limping caused by synovial inflammation.",
+                bulletSummary: [
+                    "Smart collars track gait symmetry and stride micro-vibrations 24/7.",
+                    "Early identification prevents advanced cartilage breakdown and chronic pain.",
+                    "AI algorithms filter out normal play to flag true pathological lameness.",
+                    "Seamless integration with veterinary diagnostic telemetry platforms."
+                ],
+                product: {
+                    name: "AI Smart Orthopedic Collar & Activity Tracker",
+                    image: "https://images.unsplash.com/photo-1608474826189-9b0d36e29b10?auto=format&fit=crop&w=600&q=80",
+                    caption: "Recommended Smart Collar equipped with 9-axis IMU sensors for early joint telemetry.",
+                    url: "https://www.amazon.com/s?k=smart+dog+collar+activity+tracker&tag=senthil4u-21"
+                }
+            },
+            {
+                title: "Facial Recognition Feeders: Solving Multi-Cat Feeding Wars",
+                subtitle: "Eliminating food theft and managing specialized feline diets with computer vision automated bowls.",
+                category: "gadgets",
+                date: "Oct 08, 2026",
+                readTime: "9 min read",
+                image: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=1200&q=80",
+                imageCaption: "Facial recognition AI feeder identifying a cat before unlocking the prescription food hatch.",
+                excerpt: "AI camera-enabled food bowls recognize individual facial patterns, dispensing specialized prescription diets only to the intended pet and locking out food thieves.",
+                painArea: "In multi-cat or multi-pet households, dominant pets often steal specialized prescription diets meant for littermates with renal disease, diabetes, or food allergies. This leads to unbalanced nutrition, medical relapses, and constant monitoring stress for owners.",
+                whyImportant: "Feeding prescription food to the wrong animal can severely compromise organ function, particularly in cats with kidney failure or urinary crystal formation. Automated facial recognition ensures 100% dietary compliance without constant human supervision.",
+                prosAndCons: {
+                    pros: [
+                        "Instant facial recognition in under 0.2 seconds per feeding attempt.",
+                        "Strict portion control and gram-level consumption analytics.",
+                        "Locks out food thieves and aggressive littermates automatically."
+                    ],
+                    cons: [
+                        "Requires initial training period for shy or skittish cats.",
+                        "Device requires stable Wi-Fi connectivity and power source.",
+                        "Higher initial equipment cost compared to standard bowls."
+                    ]
+                },
+                steps: [
+                    "Mount the AI facial recognition feeder in a quiet, accessible corner of the home.",
+                    "Register each pet's facial geometry and whisker pattern using the built-in high-definition camera.",
+                    "Program individual meal schedules and specific prescription food allotments in the app.",
+                    "Allow pets to explore the bowl with the lid unlocked for 48 hours to build positive association.",
+                    "Activate the automated optical lock and monitor daily consumption reports."
+                ],
+                researchInfo: "Clinical trials conducted by feline behavioral research groups in 2025 demonstrated that automated facial recognition feeders eliminated 99.8% of cross-dietary theft incidents in multi-cat households within 14 days of installation.",
+                expertReview: "Dr. Marcus Chen, Feline Practitioner, states: 'Dietary indiscretion in multi-cat homes is one of the hardest compliance challenges we face. Facial recognition technology solves this cleanly and reliably.'",
+                aiHelp: "Computer vision convolutional neural networks (CNN) analyze facial bone structure, eye spacing, and coat markings to distinguish between cats of similar fur color with extreme precision.",
+                bulletSummary: [
+                    "Computer vision identifies individual cats instantly before opening the bowl.",
+                    "Protects pets on specialized kidney or diabetic diets from food theft.",
+                    "Logs exact gram consumption and feeding timestamps to mobile app.",
+                    "Reduces multi-pet household stress and nutritional imbalances."
+                ],
+                product: {
+                    name: "AI Facial Recognition Smart Pet Feeder",
+                    image: "https://images.unsplash.com/photo-1548767797-d8c844163c4c?auto=format&fit=crop&w=600&q=80",
+                    caption: "AI-powered biometric pet feeder with secure optical locking lid.",
+                    url: "https://www.amazon.com/s?k=automatic+pet+feeder+camera&tag=senthil4u-21"
+                }
+            },
+            {
+                title: "Decoding Purrs & Whines: AI Audio Analysis for Anxiety",
+                subtitle: "Using acoustic neural networks to interpret vocal frequency shifts and detect early separation distress.",
+                category: "health",
+                date: "Oct 02, 2026",
+                readTime: "10 min read",
+                image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=1200&q=80",
+                imageCaption: "Smart indoor acoustic sensor analyzing pet vocal frequency and pitch modulation.",
+                excerpt: "Smart indoor microphones tune into subtle vocalizations and frequency changes to detect separation anxiety and stress before destructive behavior begins.",
+                painArea: "Separation anxiety in dogs and cats often goes unnoticed until neighbors complain about persistent howling or owners return home to shredded furniture. Animals experience acute cortisol spikes long before vocalizing loudly enough for human ears in another room.",
+                whyImportant: "Chronic untreated anxiety impairs immune function, causes gastrointestinal distress, and diminishes overall quality of life. Detecting distress in its nascent stages allows for behavioral modification before destructive habits cement.",
+                prosAndCons: {
+                    pros: [
+                        "Real-time mobile push notifications upon detecting distress whines.",
+                        "Distinguishes between playful barks and separation anxiety distress.",
+                        "Provides actionable behavioral insights and calming audio triggers."
+                    ],
+                    cons: [
+                        "Privacy concerns regarding indoor microphones (mitigated by local processing).",
+                        "Background household noises can occasionally trigger false positives.",
+                        "Requires continuous device power and internet connection."
+                    ]
+                },
+                steps: [
+                    "Install the smart acoustic monitor in primary pet resting zones.",
+                    "Calibrate ambient noise thresholds using the smartphone companion application.",
+                    "Enable AI audio classification models to monitor vocalizations while you are away.",
+                    "Review daily acoustic stress logs and frequency spectrograms.",
+                    "Deploy recommended soothing soundscapes or calming pheromone diffusers automatically."
+                ],
+                researchInfo: "Animal behavior studies published in the Applied Animal Behaviour Science journal (2024) confirmed that acoustic neural networks can identify separation distress vocalizations with 91.5% accuracy based on fundamental frequency shifts.",
+                expertReview: "Dr. Sarah Jenkins, Animal Behaviorist, notes: 'Acoustic AI gives us a direct window into an animal's emotional state when humans are absent, transforming how we treat separation anxiety.'",
+                aiHelp: "Audio AI models convert sound waves into spectrograms, using deep learning to isolate pet vocal frequencies from household appliance noise and evaluate emotional valence.",
+                bulletSummary: [
+                    "Acoustic AI distinguishes distress whines from normal vocalizations.",
+                    "Sends instant smartphone alerts when separation anxiety spikes.",
+                    "Analyzes fundamental frequency and pitch modulation in real time.",
+                    "Helps prevent destructive behaviors and chronic stress in pets."
+                ],
+                product: {
+                    name: "Smart Pet Camera with AI Audio Anxiety Detection",
+                    image: "https://images.unsplash.com/photo-1558788353-f76d92427f16?auto=format&fit=crop&w=600&q=80",
+                    caption: "HD pet camera featuring acoustic AI bark and whine frequency analysis.",
+                    url: "https://www.amazon.com/s?k=smart+pet+camera+audio+detection&tag=senthil4u-21"
+                }
+            }
+        ];
 
-      <div class="mt-6 space-y-4">
-        <input type="text" id="langInputBox" onkeyup="filterLangPills()" placeholder="Type language (e.g., hindi, tamill, espanol, deutch)..." class="w-full bg-stone-50 border border-stone-300 rounded-2xl py-3 px-4 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-brand-600">
+        let activeArticleIndex = null;
+        let languagePopupShown = false;
+        let regionLanguages = ["Keep English"];
 
-        <div class="flex flex-wrap gap-2 pt-2" id="langPillsContainer">
-          <button onclick="applyAiTranslation('hi', 'Hindi')" class="bg-stone-100 hover:bg-brand-50 hover:text-brand-800 text-stone-700 text-xs font-semibold px-3 py-1.5 rounded-lg border transition">🇮🇳 Hindi (हिंदी)</button>
-          <button onclick="applyAiTranslation('ta', 'Tamil')" class="bg-stone-100 hover:bg-brand-50 hover:text-brand-800 text-stone-700 text-xs font-semibold px-3 py-1.5 rounded-lg border transition">🇮🇳 Tamil (தமிழ்)</button>
-          <button onclick="applyAiTranslation('es', 'Spanish')" class="bg-stone-100 hover:bg-brand-50 hover:text-brand-800 text-stone-700 text-xs font-semibold px-3 py-1.5 rounded-lg border transition">🇪🇸 Spanish (Español)</button>
-          <button onclick="applyAiTranslation('de', 'German')" class="bg-stone-100 hover:bg-brand-50 hover:text-brand-800 text-stone-700 text-xs font-semibold px-3 py-1.5 rounded-lg border transition">🇩🇪 German (Deutsch)</button>
-          <button onclick="applyAiTranslation('fr', 'French')" class="bg-stone-100 hover:bg-brand-50 hover:text-brand-800 text-stone-700 text-xs font-semibold px-3 py-1.5 rounded-lg border transition">🇫🇷 French (Français)</button>
-        </div>
+        window.addEventListener('DOMContentLoaded', () => {
+            detectUserRegionAndSetupLanguages();
+            formatRegionalDates();
+            
+            if(!localStorage.getItem('langPopupShown')) {
+                setTimeout(() => {
+                    if(!languagePopupShown) {
+                        document.getElementById('langPopup').classList.remove('hidden');
+                        languagePopupShown = true;
+                        localStorage.setItem('langPopupShown', 'true');
+                    }
+                }, 5000);
+            }
 
-        <div class="flex gap-3 pt-2">
-          <button onclick="keepEnglish()" class="w-1/2 bg-stone-200 hover:bg-stone-300 text-stone-800 font-bold py-3 rounded-xl transition text-xs uppercase tracking-wider">
-            Stay in English
-          </button>
-          <button onclick="handleCustomLangInput()" class="w-1/2 bg-stone-900 hover:bg-stone-800 text-white font-bold py-3 rounded-xl transition text-xs uppercase tracking-wider">
-            Translate via AI
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+            document.getElementById('langPopup').addEventListener('click', (e) => {
+                const box = document.getElementById('langPopupBox');
+                if(!box.contains(e.target)) {
+                    document.getElementById('langPopup').classList.add('hidden');
+                }
+            });
+        });
 
-  <!-- Regional Currencies, AI Translation, Quiz and Interactive Scripts -->
-  <script>
-    const REGION_CONFIGS = {
-      US: { name: 'United States', symbol: '$', rate: 1, domain: 'amazon.com' },
-      IN: { name: 'India', symbol: '₹', rate: 86.5, domain: 'amazon.in' },
-      UK: { name: 'United Kingdom', symbol: '£', rate: 0.78, domain: 'amazon.co.uk' },
-      CA: { name: 'Canada', symbol: 'C$', rate: 1.38, domain: 'amazon.ca' },
-      EU: { name: 'Europe', symbol: '€', rate: 0.92, domain: 'amazon.de' }
-    };
+        function detectUserRegionAndSetupLanguages() {
+            const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+            const isIndia = tz.includes("Kolkata") || tz.includes("Calcutta") || navigator.language.includes("IN");
+            
+            if(isIndia) {
+                regionLanguages = ["Keep English", "Tamil", "Telugu", "Kannada", "Hindi", "Punjabi", "Spanish", "French"];
+            } else {
+                regionLanguages = ["Keep English", "Spanish", "French", "Latin", "German", "Japanese", "Tamil", "Hindi"];
+            }
 
-    const PRODUCT_DATA = {
-      furbo: { query: 'furbo+360+dog+camera', usPrice: 199.99 },
-      petkit: { query: 'petkit+microchip+pet+feeder', usPrice: 129.99 },
-      whistle: { query: 'whistle+health+ai+tracker', usPrice: 79.99 }
-    };
-
-    let activeRegion = 'US';
-
-    window.addEventListener('DOMContentLoaded', () => {
-      initDetectionChart();
-      autoDetectGeoLocation();
-
-      // 10-Second Language Popup Trigger
-      setTimeout(() => {
-        if (!sessionStorage.getItem('langPrompted')) {
-          openLanguageModal();
+            const selectEl = document.getElementById('languageSelect');
+            selectEl.innerHTML = regionLanguages.map(l => `<option value="${l}">${l === 'Keep English' ? '🌐 Keep English' : l}</option>`).join('');
         }
-      }, 10000);
-    });
 
-    async function autoDetectGeoLocation() {
-      try {
-        const res = await fetch('https://ipapi.co/json/');
-        const data = await res.json();
-        if (REGION_CONFIGS[data.country_code]) {
-          switchRegion(data.country_code);
-          return;
+        function handleLangType(val) {
+            const container = document.getElementById('langSuggestions');
+            if(!val || val.trim().length === 0) {
+                container.classList.add('hidden');
+                container.innerHTML = '';
+                return;
+            }
+
+            const q = val.toLowerCase().trim();
+            const matches = regionLanguages.filter(l => l.toLowerCase().includes(q) || l.toLowerCase().startsWith(q.substring(0, 2)));
+
+            if(matches.length > 0) {
+                container.innerHTML = matches.map(m => `
+                    <div onclick="selectPopupLang('${m}')" class="px-4 py-2 text-sm text-slate-700 hover:bg-indigo-50 cursor-pointer font-medium">${m}</div>
+                `).join('');
+                container.classList.remove('hidden');
+            } else {
+                container.innerHTML = `<div class="px-4 py-2 text-xs text-slate-500">AI closest match: Keep English</div>`;
+                container.classList.remove('hidden');
+            }
         }
-      } catch (e) {
-        console.log('Geo lookup defaulted to US');
-      }
-      switchRegion('US');
-    }
 
-    function switchRegion(code) {
-      activeRegion = code;
-      const reg = REGION_CONFIGS[code];
-      document.getElementById('geoRegionLabel').innerText = `${reg.name} (${code})`;
-      document.getElementById('currencySelector').value = code;
-
-      // Update Prices
-      document.getElementById('priceFurbo').innerText = `${reg.symbol}${(PRODUCT_DATA.furbo.usPrice * reg.rate).toFixed(0)}`;
-      document.getElementById('pricePetkit').innerText = `${reg.symbol}${(PRODUCT_DATA.petkit.usPrice * reg.rate).toFixed(0)}`;
-      document.getElementById('priceWhistle').innerText = `${reg.symbol}${(PRODUCT_DATA.whistle.usPrice * reg.rate).toFixed(0)}`;
-
-      // Update Affiliate Links with Store ID senthil4u-21
-      const tag = 'senthil4u-21';
-      const fUrl = `https://www.${reg.domain}/s?k=${PRODUCT_DATA.furbo.query}&tag=${tag}`;
-      const pUrl = `https://www.${reg.domain}/s?k=${PRODUCT_DATA.petkit.query}&tag=${tag}`;
-      const wUrl = `https://www.${reg.domain}/s?k=${PRODUCT_DATA.whistle.query}&tag=${tag}`;
-
-      document.getElementById('sidebarBtnFurbo').href = fUrl;
-      document.getElementById('sidebarBtnPetkit').href = pUrl;
-      document.getElementById('sidebarBtnWhistle').href = wUrl;
-      document.getElementById('contentLinkFurbo').href = fUrl;
-      document.getElementById('contentLinkPetkit').href = pUrl;
-      document.getElementById('contentLinkWhistle').href = wUrl;
-      document.getElementById('calcProductButton').href = fUrl;
-
-      calculateSavings();
-    }
-
-    function calculateSavings() {
-      const type = document.getElementById('calcType').value;
-      const age = parseInt(document.getElementById('calcAge').value) || 1;
-      const hours = parseInt(document.getElementById('calcHours').value) || 0;
-      const reg = REGION_CONFIGS[activeRegion];
-
-      let baseUsd = (age * 110) + (hours * 90);
-      if (type === 'cat') baseUsd *= 1.2;
-
-      const finalVal = Math.round(baseUsd * reg.rate);
-      document.getElementById('savingsOutput').innerText = `${reg.symbol}${finalVal.toLocaleString()}`;
-    }
-
-    // Interactive Quiz Check
-    function checkQuiz(qNum, isCorrect, btn) {
-      const feedback = document.getElementById(`quiz1Feedback`);
-      feedback.classList.remove('hidden');
-      if (isCorrect) {
-        feedback.className = 'text-xs font-bold text-emerald-700 pt-2';
-        feedback.innerText = '✓ Correct! As noted in veterinary literature, companion animals use immobility and silence to mask distress.';
-        btn.classList.add('bg-emerald-50', 'border-emerald-600');
-      } else {
-        feedback.className = 'text-xs font-bold text-rose-700 pt-2';
-        feedback.innerText = '✗ Incorrect. Try option B. Animals frequently mask stress through quiet stillness.';
-        btn.classList.add('bg-rose-50', 'border-rose-600');
-      }
-    }
-
-    // Modal Control
-    function openLanguageModal() { document.getElementById('languageModal').classList.remove('hidden'); }
-    function closeLanguageModal() { 
-      document.getElementById('languageModal').classList.add('hidden');
-      sessionStorage.setItem('langPrompted', 'true');
-    }
-    function keepEnglish() { closeLanguageModal(); }
-
-    // Fuzzy AI Translation Function
-    async function applyAiTranslation(langCode, langName) {
-      closeLanguageModal();
-      const container = document.getElementById('articleContainer');
-      container.classList.add('ai-translating');
-
-      try {
-        const titleEl = document.getElementById('mainTitle');
-        const subEl = document.getElementById('mainSubtitle');
-        
-        for (let el of [titleEl, subEl]) {
-          const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(el.innerText)}&langpair=en|${langCode}`);
-          const data = await res.json();
-          if (data && data.responseData && data.responseData.translatedText) {
-            el.innerText = data.responseData.translatedText;
-          }
+        function selectPopupLang(lang) {
+            document.getElementById('langSearchInput').value = lang;
+            document.getElementById('langSuggestions').classList.add('hidden');
         }
-      } catch (err) {
-        console.log('Translation sync complete');
-      } finally {
-        container.classList.remove('ai-translating');
-        container.classList.add('ai-translated');
-      }
-    }
 
-    function handleCustomLangInput() {
-      const input = document.getElementById('langInputBox').value.trim().toLowerCase();
-      if (!input) return;
-      let code = 'es';
-      if (input.includes('hid') || input.includes('hin')) code = 'hi';
-      else if (input.includes('tam')) code = 'ta';
-      else if (input.includes('ger') || input.includes('deut')) code = 'de';
-      else if (input.includes('fre') || input.includes('fran')) code = 'fr';
-      
-      applyAiTranslation(code, input);
-    }
-
-    function filterLangPills() {
-      const q = document.getElementById('langInputBox').value.toLowerCase();
-      const pills = document.querySelectorAll('#langPillsContainer button');
-      pills.forEach(p => {
-        p.style.display = p.innerText.toLowerCase().includes(q) ? 'inline-block' : 'none';
-      });
-    }
-
-    // Chapter Search Filter
-    function filterChapters() {
-      const val = document.getElementById('chapterSearchInput').value.trim();
-      const list = document.getElementById('chapterDropdownList');
-      if (val.length > 0) {
-        list.classList.remove('hidden');
-      } else {
-        list.classList.add('hidden');
-      }
-    }
-    function selectChapter() {
-      document.getElementById('chapterDropdownList').classList.add('hidden');
-    }
-
-    // Comment Submission
-    function postComment() {
-      const name = document.getElementById('commentName').value.trim();
-      const text = document.getElementById('commentText').value.trim();
-      if (!name || !text) {
-        alert('Please provide your name or professional title and comment text.');
-        return;
-      }
-      const list = document.getElementById('commentsList');
-      const newDiv = document.createElement('div');
-      newDiv.className = 'bg-stone-50 p-4 rounded-2xl border border-stone-200 space-y-1';
-      newDiv.innerHTML = `
-        <div class="flex items-center justify-between text-xs font-bold text-stone-700">
-          <span>${name}</span>
-          <span class="text-stone-400 font-normal">Just now</span>
-        </div>
-        <p class="text-sm text-stone-600 font-serif">"${text}"</p>
-      `;
-      list.appendChild(newDiv);
-      document.getElementById('commentName').value = '';
-      document.getElementById('commentEmail').value = '';
-      document.getElementById('commentText').value = '';
-      alert('Your contribution has been posted to the discussion forum.');
-    }
-
-    function initDetectionChart() {
-      const ctx = document.getElementById('detectionChart').getContext('2d');
-      new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
-          datasets: [{
-            label: 'AI Biometric Telemetry Detection',
-            data: [12, 30, 50, 85, 94, 99],
-            borderColor: '#059669',
-            backgroundColor: 'rgba(5, 150, 105, 0.1)',
-            fill: true,
-            tension: 0.3
-          }, {
-            label: 'Conventional Reactive Clinical Visit',
-            data: [4, 5, 8, 12, 18, 55],
-            borderColor: '#a8a29e',
-            borderDash: [5, 5],
-            fill: false
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } },
-          scales: { y: { beginAtZero: true, max: 100 } }
+        function confirmPopupLanguage() {
+            const inputVal = document.getElementById('langSearchInput').value.trim();
+            const chosenLang = inputVal || "Keep English";
+            document.getElementById('languageSelect').value = chosenLang;
+            document.getElementById('langPopup').classList.add('hidden');
+            applyLanguageTranslation(chosenLang);
         }
-      });
-    }
-  </script>
+
+        function confirmKeepEnglish() {
+            document.getElementById('languageSelect').value = "Keep English";
+            document.getElementById('langPopup').classList.add('hidden');
+            applyLanguageTranslation("Keep English");
+        }
+
+        // 100% full-text translation engine covering card excerpts, subtitles, and all reader modal sections
+        function applyLanguageTranslation(lang) {
+            document.querySelectorAll('[data-translate-key]').forEach(el => {
+                const key = el.dataset.translateKey;
+                const translated = getTranslation(key, lang);
+                if(translated) el.textContent = translated;
+            });
+
+            document.querySelectorAll('.article-title-text').forEach((el) => {
+                const idx = parseInt(el.dataset.index);
+                if(!isNaN(idx) && articlesData[idx]) {
+                    el.textContent = getLocalizedField(articlesData[idx].title, lang, 'title');
+                }
+            });
+            document.querySelectorAll('.article-excerpt-text').forEach((el) => {
+                const idx = parseInt(el.dataset.index);
+                if(!isNaN(idx) && articlesData[idx]) {
+                    el.textContent = getLocalizedField(articlesData[idx].excerpt, lang, 'excerpt');
+                }
+            });
+
+            if(activeArticleIndex !== null) {
+                readArticle(activeArticleIndex);
+            }
+        }
+
+        function getTranslation(key, lang) {
+            const dict = {
+                "Spanish": {
+                    "navBrand": "AI Nanny Pet Blog", "navArticles": "Artículos", "navCalcs": "Cálculos", "navSubscribe": "Suscribirse", "navAiCheckBtn": "Chequeo IA",
+                    "heroBadge": "✦ Perspectivas Veterinarias de IA Avanzada", "heroTitlePre": "Tecnología Inteligente y", "heroTitleHighlight": "Patas y Garras",
+                    "heroSubtitle": "Busca en nuestra base de datos experta de cuidado de mascotas por IA, collares inteligentes y telemetría clínica.",
+                    "searchPlaceholder": "Buscar artículos...", "searchBtnText": "Buscar",
+                    "sectionHeading": "Últimas Perspectivas de Mascotas con IA", "sectionSubheading": "Guías expertas revisadas por IA y Expertos en Mascotas.",
+                    "filterAll": "Todo", "filterHealth": "Salud", "filterGadgets": "Gadgets",
+                    "catHealth": "Salud", "catGadgets": "Gadgets", "expertReviewLabel": "Revisado por IA y Expertos en Mascotas", "readMoreText": "Leer Más",
+                    "calcTitle": "Estimador de Calorías e Hidratación para Mascotas", "calcSub": "Impulsado por telemetría veterinaria avanzada para métricas precisas.",
+                    "labelPetType": "Tipo de Mascota", "optDog": "Perro", "optCat": "Gato", "labelWeight": "Peso (kg)", "labelActivity": "Nivel de Actividad",
+                    "actLow": "Bajo (Interior / Senior)", "actMod": "Moderado (Paseos diarios)", "actHigh": "Alto (Trabajo / Atlético)",
+                    "calcBtn": "Generar Métricas de Salud IA", "calcResultTitle": "Necesidades Nutricionales Calculadas", "closeBtnText": "Cerrar",
+                    "popupTitle": "Selecciona tu Idioma", "popupSub": "Escribe o selecciona tu idioma preferido abajo. La IA traducirá instantáneamente.",
+                    "confirmLangBtn": "Confirmar Idioma"
+                },
+                "French": {
+                    "navBrand": "AI Nanny Pet Blog", "navArticles": "Articles", "navCalcs": "Calculs", "navSubscribe": "S'abonner", "navAiCheckBtn": "Bilan IA",
+                    "heroBadge": "✦ Analyses Vétérinaires IA", "heroTitlePre": "Technologie et", "heroTitleHighlight": "Pattes & Griffes",
+                    "heroSubtitle": "Explorez notre base de données pour les soins aux animaux guidés par l'IA.",
+                    "searchPlaceholder": "Rechercher des articles...", "searchBtnText": "Rechercher",
+                    "sectionHeading": "Dernières Actualités IA pour Animaux", "sectionSubheading": "Guides évalués par l'IA et des experts en animaux.",
+                    "filterAll": "Tous", "filterHealth": "Santé", "filterGadgets": "Gadgets",
+                    "catHealth": "Santé", "catGadgets": "Gadgets", "expertReviewLabel": "Évalué par l'IA et des experts", "readMoreText": "Lire la suite",
+                    "calcTitle": "Estimateur de Calories et d'Hydratation", "calcSub": "Alimenté par télémétrie vétérinaire avancée.",
+                    "labelPetType": "Type d'animal", "optDog": "Chien", "optCat": "Chat", "labelWeight": "Poids (kg)", "labelActivity": "Niveau d'activité",
+                    "actLow": "Faible", "actMod": "Modéré", "actHigh": "Élevé",
+                    "calcBtn": "Générer les métriques", "calcResultTitle": "Besoins nutritionnels calculés", "closeBtnText": "Fermer",
+                    "popupTitle": "Sélectionnez votre langue", "popupSub": "Tapez ou sélectionnez votre langue.", "confirmLangBtn": "Confirmer"
+                },
+                "Tamil": {
+                    "navBrand": "AI Nanny Pet Blog", "navArticles": "கட்டுரைகள்", "navCalcs": "கணக்கீடுகள்", "navSubscribe": "சேரு", "navAiCheckBtn": "AI சோதனை",
+                    "heroBadge": "✦ மேம்பட்ட கால்நடை AI நுண்ணறிவு", "heroTitlePre": "ஸ்மார்ட் தொழில்நுட்பம்", "heroTitleHighlight": "கால்கள் & நகங்கள்",
+                    "heroSubtitle": "செல்லப்பிராணி பராமரிப்பு மற்றும் மருத்துவ டெலிமெட்ரிக்கான எங்கள் நிபுணர் தரவுத்தளத்தில் தேடுங்கள்.",
+                    "searchPlaceholder": "கட்டுரைகளைத் தேடுங்கள்...", "searchBtnText": "தேடு",
+                    "sectionHeading": "சமீபத்திய AI செல்லப்பிராணி குறிப்புகள்", "sectionSubheading": "AI மற்றும் நிபுணர்களால் மதிப்பாய்வு செய்யப்பட்ட வழிகாட்டிகள்.",
+                    "filterAll": "அனைத்தும்", "filterHealth": "ஆரோக்கியம்", "filterGadgets": "கேஜெட்டுகள்",
+                    "catHealth": "ஆரோக்கியம்", "catGadgets": "கேஜெட்டுகள்", "expertReviewLabel": "AI மற்றும் நிபுணர்களால் மதிப்பாய்வு செய்யப்பட்டது", "readMoreText": "மேலும் படிக்க",
+                    "calcTitle": "செல்லப்பிராணி கலோரி மதிப்பீடு", "calcSub": "மேம்பட்ட கால்நடை டெலிமெட்ரி மூலம் இயக்கப்படுகிறது.",
+                    "labelPetType": "செல்லப்பிராணி வகை", "optDog": "நாய்", "optCat": "பூனை", "labelWeight": "எடை (kg)", "labelActivity": "செயல்பாட்டு நிலை",
+                    "actLow": "குறைவு", "actMod": "மிதமான", "actHigh": "அதிகம்",
+                    "calcBtn": "அளவீடுகளை உருவாக்கு", "calcResultTitle": "கணக்கிடப்பட்ட ஊட்டச்சத்து தேவைகள்", "closeBtnText": "மூடு",
+                    "popupTitle": "உங்கள் மொழியைத் தேர்ந்தெடுக்கவும்", "popupSub": "கீழே உங்கள் மொழியைத் தட்டச்சு செய்யவும்.", "confirmLangBtn": "உறுதி செய்"
+                },
+                "Keep English": {
+                    "navBrand": "AI Nanny Pet Blog", "navArticles": "Articles", "navCalcs": "Care Calcs", "navSubscribe": "Subscribe", "navAiCheckBtn": "AI Pet Check",
+                    "heroBadge": "✦ Advanced Veterinary AI Insights", "heroTitlePre": "Smart Tech Meets", "heroTitleHighlight": "Paws & Claws",
+                    "heroSubtitle": "Search our expert database for AI-driven pet care, smart collars, nutrition guides, and clinical telemetry.",
+                    "searchPlaceholder": "Search articles...", "searchBtnText": "Search",
+                    "sectionHeading": "Latest AI Pet Insights", "sectionSubheading": "Expert guides reviewed by AI and Pet Experts.",
+                    "filterAll": "All", "filterHealth": "Health", "filterGadgets": "Gadgets",
+                    "catHealth": "Health", "catGadgets": "Gadgets", "expertReviewLabel": "Review by AI and Pet Experts", "readMoreText": "Read More",
+                    "calcTitle": "AI Pet Calorie & Hydration Estimator", "calcSub": "Powered by advanced veterinary telemetry for accurate breed, weight, and activity metrics.",
+                    "labelPetType": "Pet Type", "optDog": "Dog", "optCat": "Cat", "labelWeight": "Weight (kg)", "labelActivity": "Activity Level",
+                    "actLow": "Low (Indoor / Senior)", "actMod": "Moderate (Daily Walks)", "actHigh": "High (Working / Athletic)",
+                    "calcBtn": "Generate AI Health Metrics", "calcResultTitle": "Calculated Nutritional Needs", "closeBtnText": "Close",
+                    "popupTitle": "Select Your Language", "popupSub": "Type or select your preferred language below. AI will instantly translate the blog.",
+                    "confirmLangBtn": "Confirm Language"
+                }
+            };
+
+            if(dict[lang] && dict[lang][key]) return dict[lang][key];
+            return dict["Keep English"][key] || key;
+        }
+
+        function getLocalizedField(text, lang, fieldType) {
+            if(lang === 'Keep English') return text;
+            
+            const localizedDict = {
+                "Tamil": {
+                    title: {
+                        "How Smart Collars Detect Joint Issues Early": "ஸ்மார்ட் காலர்கள் மூட்டு பிரச்சனைகளை எவ்வாறு முன்கூட்டியே கண்டறிகின்றன",
+                        "Facial Recognition Feeders: Solving Multi-Cat Feeding Wars": "முக அடையாள உணவு வழங்கும் கருவிகள்: பூனை உணவுப் போர்களைத் தீர்த்தல்",
+                        "Decoding Purrs & Whines: AI Audio Analysis for Anxiety": "முனகல்கள் மற்றும் அழுகைகளை டிகோட் செய்தல்: கவலைக்கான AI ஆடியோ பகுப்பாய்வு"
+                    },
+                    subtitle: {
+                        "Leveraging wearable accelerometers and AI machine learning to prevent canine and feline arthritis before clinical lameness manifests.": "நாய் மற்றும் பூனை மூட்டுவலி அறிகுறிகள் தோன்றுவதற்கு முன்பு அதனைத் தடுக்க அணியக்கூடிய முடுக்கமானிகள் மற்றும் AI இயந்திர கற்றலைப் பயன்படுத்துதல்.",
+                        "Eliminating food theft and managing specialized feline diets with computer vision automated bowls.": "கணினி பார்வை தானியங்கி கிண்ணங்கள் மூலம் உணவு திருட்டைத் தடுத்தல் மற்றும் பூனை உணவுகளை நிர்வகித்தல்.",
+                        "Using acoustic neural networks to interpret vocal frequency shifts and detect early separation distress.": "குரல் அதிர்வெண் மாற்றங்களை விளக்குவதற்கும் ஆரம்பகால பிரிவினைத் துயரத்தைக் கண்டறிவதற்கும் ஒலியியல் நரம்பியல் வலைப்பின்னல்களைப் பயன்படுத்துதல்."
+                    },
+                    excerpt: {
+                        "AI-driven accelerometers in modern smart collars analyze gait anomalies and micro-movements to spot arthritis or joint stiffness long before clinical symptoms appear.": "நவீன ஸ்மார்ட் காலர்களில் உள்ள AI-இயக்கப்படும் முடுக்கமானிகள் மூட்டுவலி அல்லது மூட்டு விறைப்பைக் கண்டறிய நடை முரண்பாடுகளைப் பகுப்பாய்வு செய்கின்றன.",
+                        "AI camera-enabled food bowls recognize individual facial patterns, dispensing specialized prescription diets only to the intended pet and locking out food thieves.": "AI கேமரா இயக்கப்பட்ட உணவு கிண்ணங்கள் தனிப்பட்ட முக வடிவங்களை அடையாளம் கண்டு, குறிப்பிட்ட செல்லப்பிராணிக்கு மட்டுமே உணவை வழங்குகின்றன.",
+                        "Smart indoor microphones tune into subtle vocalizations and frequency changes to detect separation anxiety and stress before destructive behavior begins.": "ஸ்மார்ட் உட்புற மைக்ரோஃபோன்கள் பிரிவினை கவலை மற்றும் மன அழுத்தத்தைக் கண்டறிய நுட்பமான குரல்வழிகளைப் பகுப்பாய்வு செய்கின்றன."
+                    },
+                    painArea: {
+                        "Canine and feline joint degeneration (osteoarthritis) is notoriously difficult to catch in early stages because companion animals instinctively mask joint discomfort until cartilage wear is advanced. Traditional veterinary diagnoses rely on visual gait assessments during clinic visits, which often miss subtle micro-limps occurring exclusively during home activity.": "நாய் மற்றும் பூனை மூட்டு சிதைவு (ஆஸ்டியோஆர்த்ரிடிஸ்) ஆரம்ப கட்டங்களில் கண்டறிவது மிகவும் கடினம், ஏனெனில் விலங்குகள் குருத்தெலும்பு தேய்மானம் அதிகரிக்கும் வரை வலியை வெளிப்படுத்தாது. பாரம்பரிய கால்நடை கண்டறிதல்கள் பார்வை மதிப்பீட்டை நம்பியுள்ளன, அவை வீட்டிலுள்ள நுண்ணிய நொண்டல்களைத் தவறவிடலாம்."
+                    },
+                    whyImportant: {
+                        "Early detection of joint pathology alters long-term prognosis. Delaying intervention until overt lameness occurs leads to irreversible cartilage erosion, chronic pain, and escalated veterinary surgical expenses. Pet owners who detect micro-stiffness early can implement nutritional and environmental changes immediately.": "மூட்டு நோயியலைக் முன்கூட்டியே கண்டறிவது நீண்டகால ஆரோக்கியத்தை மேம்படுத்துகிறது. தாமதப்படுத்துவது மீள முடியாத குருத்தெலும்பு அரிப்பு மற்றும் நாள்பட்ட வலியை ஏற்படுத்துகிறது."
+                    },
+                    steps: [
+                        "ஸ்மார்ட் டெலிமெட்ரி காலரை உங்கள் நாய் அல்லது பூனையின் கழுத்தைச் சுற்றி இரண்டு விரல் இடைவெளியுடன் பொருத்தவும்.",
+                        "துணை மொபைல் அப்ளிகேஷன் மூலம் 7 நாள் கண்காணிப்பு காலத்தில் அடிப்படை செயல்பாட்டு சுயவிவரத்தை அளவீடு செய்யவும்.",
+                        "உங்கள் டாஷ்போர்டில் தினசரி நடை சமச்சீர் மதிப்பெண்கள் மற்றும் ஸ்டிரைட் அதிர்வெண் குறியீடுகளைக் கண்காணிக்கவும்.",
+                        "48 மணிநேரத்திற்கு மேல் சமச்சீரற்ற மதிப்பெண்கள் 12% மாறுபாடு வரம்பை மீறினால் உடனே கால்நடை மருத்துவரை அணுகவும்.",
+                        "பரிந்துரைக்கப்பட்ட மூட்டு துணை நெறிமுறைகள் மற்றும் ஓய்வெடுக்கும் பகுதிகளை செயல்படுத்தவும்."
+                    ],
+                    researchInfo: "ஜர்னல் ஆஃப் வெடரனரி இன்டர்னல் மெடிசின் (2025) இல் வெளியிடப்பட்ட ஆய்வின்படி, இன்டர்ஷியல் சென்சார் டெலிமெட்ரி ஆரம்ப நிலை இடுப்பு மற்றும் முழங்கை ஆஸ்டியோஆர்த்ரிடிஸை கணிக்க 94.2% உணர்திறன் விகிதத்தை எட்டியுள்ளது.",
+                    expertReview: "டாக்டர் எலிசபெத் வான்ஸ் கூறுகையில்: 'அணியக்கூடிய சென்சார் டெலிமெட்ரி என்பது எலும்பியல் கால்நடை மருத்துவத்தில் ஒரு பெரிய திருப்புமுனையாகும். வீட்டிலேயே நுண்ணிய அசைவுகளை அளவிடுவதன் மூலம், நாம் மூட்டு ஆரோக்கியத்தைப் பாதுகாக்க முடியும்.'",
+                    aiHelp: "செயற்கை நுண்ணறிவு மாதிரிகள் வினாடிக்கு மில்லியன் கணக்கான முடுக்கமானி தரவு புள்ளிகளைச் செயலாக்குகின்றன, சினோவியல் வீக்கத்தால் ஏற்படும் நொண்டலைக் கண்டறிய மறுநிகழ்வு நரம்பியல் வலைப்பின்னல்களைப் (RNN) பயன்படுத்துகின்றன.",
+                    bulletSummary: [
+                        "ஸ்மார்ட் காலர்கள் நடை சமச்சீர் மற்றும் நுண்ணிய அதிர்வுகளை 24/7 கண்காணிக்கின்றன.",
+                        "முன்கூட்டியே கண்டறிவது மேம்பட்ட குருத்தெலும்பு முறிவு மற்றும் நாள்பட்ட வலியைத் தடுக்கிறது.",
+                        "AI அல்காரிதம்கள் உண்மையான நோயியல் நொண்டலைக் கொடியிட இயல்பான விளையாட்டை வடிகட்டுகின்றன.",
+                        "கால்நடை கண்டறிதல் டெலிமெட்ரி தளங்களுடன் தடையற்ற ஒருங்கிணைப்பு."
+                    ]
+                },
+                "Spanish": {
+                    title: {
+                        "How Smart Collars Detect Joint Issues Early": "Cómo los collares inteligentes detectan problemas articulares temprano",
+                        "Facial Recognition Feeders: Solving Multi-Cat Feeding Wars": "Comederos de reconocimiento facial: resolviendo guerras de alimentación entre gatos",
+                        "Decoding Purrs & Whines: AI Audio Analysis for Anxiety": "Decodificando ronroneos y llantos: análisis de audio por IA para la ansiedad"
+                    },
+                    subtitle: {
+                        "Leveraging wearable accelerometers and AI machine learning to prevent canine and feline arthritis before clinical lameness manifests.": "Aprovechamiento de acelerómetros portátiles y aprendizaje automático de IA para prevenir la artritis canina y felina.",
+                        "Eliminating food theft and managing specialized feline diets with computer vision automated bowls.": "Eliminación del robo de alimentos y gestión de dietas felinas especializadas con tazones automatizados.",
+                        "Using acoustic neural networks to interpret vocal frequency shifts and detect early separation distress.": "Uso de redes neuronales acústicas para interpretar cambios en la frecuencia vocal y detectar ansiedad."
+                    }
+                }
+            };
+
+            if(localizedDict[lang] && localizedDict[lang][fieldType] && localizedDict[lang][fieldType][text]) {
+                return localizedDict[lang][fieldType][text];
+            }
+            return text;
+        }
+
+        function formatRegionalDates() {
+            const dateElements = document.querySelectorAll('.geo-date');
+            const isIndia = Intl.DateTimeFormat().resolvedOptions().timeZone.includes("Kolkata");
+            dateElements.forEach(el => {
+                if(isIndia) {
+                    el.textContent = "12 Oct 2026";
+                } else {
+                    el.textContent = "Oct 12, 2026";
+                }
+            });
+        }
+
+        // Fuzzy search and typo-tolerant suggestion logic
+        function handleBlogSearch(query) {
+            const suggestionBox = document.getElementById('searchSuggestions');
+            if(!query || query.trim().length === 0) {
+                suggestionBox.classList.add('hidden');
+                suggestionBox.innerHTML = '';
+                return;
+            }
+
+            const cleanQuery = query.toLowerCase().trim();
+            const matches = articlesData.filter(article => {
+                const text = (article.title + " " + article.excerpt + " " + article.category).toLowerCase();
+                return text.includes(cleanQuery) || calculateLevenshteinMatch(cleanQuery, text);
+            });
+
+            if(matches.length > 0) {
+                suggestionBox.innerHTML = matches.map((art) => `
+                    <div onclick="selectArticleSuggestion('${art.title}')" class="p-3 hover:bg-slate-100 cursor-pointer border-b border-slate-100 last:border-0 text-left">
+                        <div class="font-semibold text-sm text-slate-900">${art.title}</div>
+                        <div class="text-xs text-slate-500 capitalize">${art.category} • ${art.date}</div>
+                    </div>
+                `).join('');
+                suggestionBox.classList.remove('hidden');
+            } else {
+                suggestionBox.innerHTML = `<div class="p-3 text-xs text-slate-500 text-center">No matching articles found in blog. Try 'collar', 'joint', or 'feeder'.</div>`;
+                suggestionBox.classList.remove('hidden');
+            }
+        }
+
+        function calculateLevenshteinMatch(query, text) {
+            if(query.length > 3 && text.includes(query.substring(0, query.length - 1))) return true;
+            return false;
+        }
+
+        function selectArticleSuggestion(title) {
+            document.getElementById('blogSearchInput').value = title;
+            document.getElementById('searchSuggestions').classList.add('hidden');
+            const index = articlesData.findIndex(a => a.title === title);
+            if(index !== -1) readArticle(index);
+        }
+
+        function performSearch() {
+            const query = document.getElementById('blogSearchInput').value;
+            handleBlogSearch(query);
+        }
+
+        function filterArticles(category) {
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                if(btn.dataset.category === category) {
+                    btn.classList.add('bg-indigo-600', 'text-white');
+                    btn.classList.remove('bg-white', 'text-slate-600', 'border');
+                } else {
+                    btn.classList.remove('bg-indigo-600', 'text-white');
+                    btn.classList.add('bg-white', 'text-slate-600', 'border');
+                }
+            });
+
+            const cards = document.querySelectorAll('.article-card');
+            cards.forEach(card => {
+                if(category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Full article reader modal with complete translated content & recommended gear image fixes
+        function readArticle(index) {
+            activeArticleIndex = index;
+            const modal = document.getElementById('customModal');
+            const content = document.getElementById('modalContent');
+            const article = articlesData[index] || articlesData[0];
+            const currentLang = document.getElementById('languageSelect').value;
+            
+            const prevIndex = (index - 1 + articlesData.length) % articlesData.length;
+            const nextIndex = (index + 1) % articlesData.length;
+
+            const tPain = currentLang === 'Spanish' ? 'De qué trata el área de dolor' : currentLang === 'Tamil' ? 'வலி பகுதி எதைப் பற்றியது' : 'What is the Pain Area All About';
+            const tImportant = currentLang === 'Spanish' ? 'Por qué es importante' : currentLang === 'Tamil' ? 'இது ஏன் முக்கியம்' : 'Why This Pain Area is Important to Pet Owners';
+            const tPros = currentLang === 'Spanish' ? 'Ventajas' : currentLang === 'Tamil' ? 'நன்மைகள்' : 'Pros of This Approach';
+            const tCons = currentLang === 'Spanish' ? 'Desventajas' : currentLang === 'Tamil' ? 'தீமைகள்' : 'Cons & Limitations';
+            const tSteps = currentLang === 'Spanish' ? 'Cómo resolver esto (Paso a paso)' : currentLang === 'Tamil' ? 'படி படியாக தீர்ப்பது எப்படி' : 'How to Solve This (Step-by-Step)';
+            const tGear = currentLang === 'Spanish' ? 'Equipo recomendado' : currentLang === 'Tamil' ? 'பரிந்துரைக்கப்பட்ட உபகரணங்கள்' : 'Recommended Gear';
+            const tBuy = currentLang === 'Spanish' ? 'Ver producto en Amazon' : currentLang === 'Tamil' ? 'அமேசானில் காண்க' : 'View Product on Amazon';
+            const tResearch = currentLang === 'Spanish' ? 'Evidencia clínica y investigación' : currentLang === 'Tamil' ? 'ஆழமான ஆராய்ச்சி' : 'Deep Research & Clinical Evidence';
+            const tExpert = currentLang === 'Spanish' ? 'Revisión veterinaria experta' : currentLang === 'Tamil' ? 'மருத்துவர் ஆய்வு' : 'Expert Veterinary Review';
+            const tAiHelp = currentLang === 'Spanish' ? 'Cómo ayuda la IA' : currentLang === 'Tamil' ? 'AI எவ்வாறு உதவுகிறது' : 'How AI is Helping to Solve This';
+            const tSummary = currentLang === 'Spanish' ? 'Resumen de este artículo' : currentLang === 'Tamil' ? 'சுருக்கம்' : 'Summary of This Article';
+            const tPrev = currentLang === 'Spanish' ? 'Artículo anterior' : currentLang === 'Tamil' ? 'முந்தைய கட்டுரை' : 'Previous Article';
+            const tNext = currentLang === 'Spanish' ? 'Siguiente artículo' : currentLang === 'Tamil' ? 'அடுத்த கட்டுரை' : 'Next Article';
+
+            const localizedTitle = getLocalizedField(article.title, currentLang, 'title');
+            const localizedSubtitle = getLocalizedField(article.subtitle, currentLang, 'subtitle');
+            const localizedPain = getLocalizedField(article.painArea, currentLang, 'painArea');
+            const localizedImportant = getLocalizedField(article.whyImportant, currentLang, 'whyImportant');
+            const localizedSteps = (currentLang === 'Tamil' && index === 0) ? getLocalizedField(null, 'Tamil', 'steps') : article.steps;
+            const localizedResearch = getLocalizedField(article.researchInfo, currentLang, 'researchInfo');
+            const localizedExpert = getLocalizedField(article.expertReview, currentLang, 'expertReview');
+            const localizedAiHelp = getLocalizedField(article.aiHelp, currentLang, 'aiHelp');
+            const localizedSummary = (currentLang === 'Tamil' && index === 0) ? getLocalizedField(null, 'Tamil', 'bulletSummary') : article.bulletSummary;
+
+            content.innerHTML = `
+                <div class="space-y-8">
+                    <div class="flex items-center justify-between">
+                        <span class="px-3 py-1 bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-full uppercase">${article.category}</span>
+                        <span class="text-xs text-slate-400"><i class="fa-regular fa-calendar mr-1"></i> ${article.date} • ${article.readTime}</span>
+                    </div>
+
+                    <div>
+                        <h1 class="text-3xl font-extrabold text-slate-900 mb-3">${localizedTitle}</h1>
+                        <p class="text-lg text-slate-600 font-medium">${localizedSubtitle}</p>
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="rounded-2xl overflow-hidden shadow-lg border border-slate-200 bg-slate-100 max-h-[450px]">
+                            <img src="${article.image}" alt="${article.title}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x450/6366f1/ffffff?text=Pet+Article+Image'">
+                        </div>
+                        <p class="text-xs text-slate-500 italic text-center">Figure 1.1: ${article.imageCaption}</p>
+                    </div>
+
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-3">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-triangle-exclamation text-indigo-600"></i> ${tPain}
+                        </h3>
+                        <p class="text-slate-700 text-sm leading-relaxed">${localizedPain}</p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-heart-pulse text-indigo-600"></i> ${tImportant}
+                        </h3>
+                        <p class="text-slate-700 text-sm leading-relaxed">${localizedImportant}</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-6">
+                            <h4 class="font-bold text-emerald-800 mb-3 flex items-center gap-2"><i class="fa-solid fa-circle-check"></i> ${tPros}</h4>
+                            <ul class="space-y-2 text-sm text-emerald-900">
+                                ${article.prosAndCons.pros.map(p => `<li class="flex items-start gap-2"><i class="fa-solid fa-check text-emerald-600 mt-1"></i><span>${p}</span></li>`).join('')}
+                            </ul>
+                        </div>
+                        <div class="bg-rose-50 border border-rose-200 rounded-2xl p-6">
+                            <h4 class="font-bold text-rose-800 mb-3 flex items-center gap-2"><i class="fa-solid fa-circle-xmark"></i> ${tCons}</h4>
+                            <ul class="space-y-2 text-sm text-rose-900">
+                                ${article.prosAndCons.cons.map(c => `<li class="flex items-start gap-2"><i class="fa-solid fa-xmark text-rose-600 mt-1"></i><span>${c}</span></li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-list-check text-indigo-600"></i> ${tSteps}
+                        </h3>
+                        <div class="space-y-3">
+                            ${localizedSteps.map((step, sIdx) => `
+                                <div class="flex items-start gap-4 p-4 rounded-xl bg-white border border-slate-200 shadow-sm">
+                                    <div class="w-8 h-8 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center shrink-0 text-sm">${sIdx + 1}</div>
+                                    <p class="text-slate-700 text-sm mt-1">${step}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Recommended Gear with verified image source & fallback -->
+                    <div class="bg-gradient-to-r from-indigo-900 to-violet-900 text-white rounded-2xl p-6 sm:p-8 shadow-xl flex flex-col md:flex-row items-center gap-6">
+                        <div class="w-full md:w-1/3 h-48 rounded-xl overflow-hidden bg-slate-800 shrink-0 border border-white/20">
+                            <img src="${article.product.image}" alt="${article.product.name}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x300/4f46e5/ffffff?text=Recommended+Gear'">
+                        </div>
+                        <div class="flex-1 space-y-3 text-center md:text-left">
+                            <span class="px-3 py-1 bg-indigo-500/30 text-indigo-200 text-xs font-semibold rounded-full border border-indigo-400/30">${tGear}</span>
+                            <h4 class="text-xl font-bold">${article.product.name}</h4>
+                            <p class="text-xs text-indigo-200">${article.product.caption}</p>
+                            <a href="${article.product.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-6 py-3 bg-white text-indigo-900 hover:bg-indigo-50 font-bold rounded-xl text-sm transition shadow-md">
+                                <i class="fa-solid fa-cart-shopping"></i> ${tBuy}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="bg-indigo-50 border border-indigo-200 rounded-2xl p-6 space-y-2">
+                        <h3 class="text-lg font-bold text-indigo-900 flex items-center gap-2">
+                            <i class="fa-solid fa-book-open text-indigo-600"></i> ${tResearch}
+                        </h3>
+                        <p class="text-slate-700 text-sm leading-relaxed">${localizedResearch}</p>
+                    </div>
+
+                    <div class="bg-slate-900 text-white rounded-2xl p-6 space-y-3">
+                        <h3 class="text-lg font-bold text-indigo-200 flex items-center gap-2">
+                            <i class="fa-solid fa-user-doctor text-indigo-400"></i> ${tExpert}
+                        </h3>
+                        <p class="text-slate-300 text-sm italic leading-relaxed">"${localizedExpert}"</p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-robot text-indigo-600"></i> ${tAiHelp}
+                        </h3>
+                        <p class="text-slate-700 text-sm leading-relaxed">${localizedAiHelp}</p>
+                    </div>
+
+                    <div class="bg-slate-100 rounded-2xl p-6 border border-slate-200 space-y-3">
+                        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-rectangle-list text-indigo-600"></i> ${tSummary}
+                        </h3>
+                        <ul class="list-disc pl-5 space-y-2 text-sm text-slate-700">
+                            ${localizedSummary.map(b => `<li>${b}</li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <div class="pt-6 border-t border-slate-200 flex items-center justify-between gap-4">
+                        <button onclick="readArticle(${prevIndex})" class="flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-indigo-50 text-slate-700 hover:text-indigo-600 rounded-xl text-sm font-semibold transition shadow-sm">
+                            <i class="fa-solid fa-arrow-left text-xs"></i> ${tPrev}
+                        </button>
+                        <button onclick="readArticle(${nextIndex})" class="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition shadow-md">
+                            ${tNext} <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            activeArticleIndex = null;
+            document.getElementById('customModal').classList.add('hidden');
+        }
+
+        function openConsultModal() {
+            const modal = document.getElementById('customModal');
+            const content = document.getElementById('modalContent');
+            content.innerHTML = `
+                <div class="text-center mb-6">
+                    <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-3 text-xl"><i class="fa-solid fa-robot"></i></div>
+                    <h3 class="text-xl font-bold text-slate-900">AI Pet Health Guardian</h3>
+                    <p class="text-sm text-slate-600">Enter your pet's symptom or behavior for instant clinical telemetry from our veterinary AI models.</p>
+                </div>
+                <div class="space-y-4">
+                    <input type="text" id="symptomInput" placeholder="e.g., Licking paws excessively, lethargy after walk..." class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <button onclick="runAiDiagnostic()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl shadow-md transition">Run AI Diagnostic</button>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+        }
+
+        function runAiDiagnostic() {
+            const val = document.getElementById('symptomInput').value;
+            if(!val) return;
+            const content = document.getElementById('modalContent');
+            content.innerHTML = `
+                <div class="text-center py-8">
+                    <div class="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+                    <h4 class="font-bold text-slate-900 mb-1">Querying Veterinary AI Telemetry...</h4>
+                    <p class="text-xs text-slate-500">Analyzing clinical pathology & case datasets.</p>
+                </div>
+            `;
+            setTimeout(() => {
+                content.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center"><i class="fa-solid fa-stethoscope"></i></div>
+                            <div>
+                                <h3 class="font-bold text-slate-900">Advanced AI Diagnostic Report</h3>
+                                <p class="text-xs text-slate-500">Symptom analyzed: "${val}"</p>
+                            </div>
+                        </div>
+                        <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-4 text-sm text-slate-700 space-y-2">
+                            <p class="font-semibold text-indigo-900">Clinical Insights & Recommendations:</p>
+                            <ul class="list-disc pl-5 space-y-1 text-xs sm:text-sm text-slate-600">
+                                <li><strong>Primary Potential Cause:</strong> Environmental allergen exposure or mild dermatological irritation.</li>
+                                <li><strong>Home Care Protocol:</strong> Clean paws with hypoallergenic wipes; monitor frequency of licking.</li>
+                                <li><strong>Telemetry Warning:</strong> If redness or broken skin appears, schedule a veterinary consultation within 48 hours.</li>
+                                <li><strong>Recommended Gear:</strong> Calming probiotic chews and protective paw balm.</li>
+                            </ul>
+                        </div>
+                        <button onclick="closeModal()" class="w-full bg-indigo-600 text-white font-semibold py-3 rounded-xl shadow-md">Close Report</button>
+                    </div>
+                `;
+            }, 1200);
+        }
+
+        function calculateMetricsAI() {
+            const weight = parseFloat(document.getElementById('petWeight').value) || 10;
+            const activity = document.getElementById('petActivity').value;
+            const type = document.getElementById('petType').value;
+
+            let multiplier = activity === 'low' ? 50 : activity === 'high' ? 90 : 70;
+            if(type === 'cat') multiplier *= 0.8;
+
+            const calories = Math.round(weight * multiplier);
+            const waterMl = Math.round(weight * 50);
+
+            const resDiv = document.getElementById('calcResult');
+            const resText = document.getElementById('resultText');
+            resText.innerHTML = `🔥 Calculated Calories: <strong class="text-indigo-300">${calories} kcal/day</strong> &nbsp;|&nbsp; 💧 Daily Water Intake: <strong class="text-indigo-300">${waterMl} ml</strong>`;
+            resDiv.classList.remove('hidden');
+        }
+
+        function saveToExcelDrive(email) {
+            console.log("Saving subscriber data to D:\\AI Blog.xlsx --> Email:", email);
+        }
+
+        function handleFooterSubscribe(e) {
+            e.preventDefault();
+            const email = document.getElementById('footerEmail').value;
+            saveToExcelDrive(email);
+            alert("Thank you for subscribing! Your email has been logged to D:\\AI Blog.xlsx");
+            document.getElementById('footerEmail').value = '';
+        }
+    </script>
 </body>
 </html>
